@@ -1,34 +1,69 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from "react";
+import axios from "axios";
 import './App.css'
+import ProductsForm from './components/ProductsForm.jsx'
+import Button from './components/Button.jsx'
+import ProductsList from './components/ProductsList.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [products, setProducts] = useState([]);
+  const [productsUpdate, setProductsUpdate] = useState(null);
+
+  useEffect(() => {
+    getData();
+  }, []);
+
+
+  const getData = () => {
+    axios
+      .get("https://products-crud.academlo.tech/products/")
+      .then((resp) => setProducts(resp.data))
+      .catch((error) => console.error(error));
+  };
+
+  const addProducts = (productsData) => {
+ 
+    axios
+      .post("https://products-crud.academlo.tech/products/", productsData)
+      .then(() => getData())
+      .catch((error) => console.error(error));
+  };
+  const deleteProducts = (idProducts) => {
+    axios
+      .delete(`https://products-crud.academlo.tech/products/${idProducts}/`)
+      .then(() => getData())
+      .catch((error) => console.error(error));
+  };
+
+  const selectProducts = (productsData) => {
+    setProductsUpdate(productsData);
+  };
+
+  const productsActualization = (productsData) => {
+    
+    axios
+      .put(`https://products-crud.academlo.tech/products/${productsData.id}/`, productsData)
+      .then(() => {
+        getData();
+        setUserUpdate(null);
+      })
+      .catch((error) => console.error(error));
+  };
 
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+  <div className="App">
+      <ProductsForm
+        createProducts={(data) => addProducts(data)}
+        selectedProducts={productsUpdate}
+        updateProducts={(data) => productsActualization(data)}
+      />
+      <ProductsList
+        productsData={products}
+        deleteProductsAction={(id) => deleteProducts(id)}
+        selectProducts={(data) => selectProducts(data)}
+      />
+     
+  </div>
   )
 }
 
