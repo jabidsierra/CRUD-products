@@ -16,7 +16,7 @@ function App() {
 
   const getData = () => {
     axios
-      .get("https://products-crud.academlo.tech/products/")
+      .get("https://crud-users-new-dev-snbf.4.us-1.fl0.io/")
       .then((resp) => setProducts(resp.data))
       .catch((error) => console.error(error));
   };
@@ -24,13 +24,13 @@ function App() {
   const addProducts = (productsData) => {
  
     axios
-      .post("https://products-crud.academlo.tech/products/", productsData)
+      .post("https://crud-users-new-dev-snbf.4.us-1.fl0.io/", productsData)
       .then(() => getData())
       .catch((error) => console.error(error));
   };
   const deleteProducts = (idProducts) => {
     axios
-      .delete(`https://products-crud.academlo.tech/products/${idProducts}/`)
+      .delete(`https://crud-users-new-dev-snbf.4.us-1.fl0.io/${idProducts}/`)
       .then(() => getData())
       .catch((error) => console.error(error));
   };
@@ -42,7 +42,7 @@ function App() {
   const productsActualization = (productsData) => {
     
     axios
-      .put(`https://products-crud.academlo.tech/products/${productsData.id}/`, productsData)
+      .put(`https://crud-users-new-dev-snbf.4.us-1.fl0.io/${productsData.id}/`, productsData)
       .then(() => {
         getData();
         setUserUpdate(null);
